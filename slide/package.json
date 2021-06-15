@@ -6,11 +6,11 @@
     "export": "slidev export"
   },
   "dependencies": {
-    "@slidev/cli": "^0.20.4",
-    "@slidev/theme-default": "*",
-    "@slidev/theme-seriph": "*",
-    "slidev-theme-flayyer": "^1.0.2",
     "slidev-theme-unicorn": "^1.0.21"
   },
-  "name": "3d-projection-slide"
+  "name": "3d-projection-slide",
+  "devDependencies": {
+    "@slidev/cli": "^0.20.4",
+    "playwright-chromium": "^1.12.2"
+  }
 }

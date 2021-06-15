@@ -1,7 +1,7 @@
 package com.lhwdev.math.projection3d
 
 import androidx.compose.runtime.*
-import com.lhwdev.math.model.buildModel3d
+import com.lhwdev.math.model.Model3d
 import com.lhwdev.math.model.parseWavefrontObj
 import com.lhwdev.math.model.stringInput
 import com.lhwdev.math.vector.MutableVector3d
@@ -33,12 +33,17 @@ class ViewportState {
 		}
 }
 
-
-
-
-
 fun main() {
-	renderComposable(rootElementId = "root") {
+	renderMain(
+		parseWavefrontObj(stringInput(objString)),
+		"root"
+	)
+}
+
+
+
+fun renderMain(obj: Model3d, rootElementId: String): () -> Unit {
+	val composition = renderComposable(rootElementId = rootElementId) {
 		val viewport by remember { mutableStateOf(ViewportState()) }
 		var message by remember { mutableStateOf<String?>(null) }
 		
@@ -49,7 +54,8 @@ fun main() {
 		}
 		
 		EventListener<MouseEvent>("mousemove") { event ->
-			viewport.rotation = eulerToQuaternionRotation(Vector3d(event.pageY.toFloat(), -event.pageX.toFloat(), 0f) / 20f)
+			viewport.rotation =
+				eulerToQuaternionRotation(Vector3d(event.pageY.toFloat(), -event.pageX.toFloat(), 0f) / 20f)
 		}
 		
 		EventListener<WheelEvent>("wheel") { event ->
@@ -65,25 +71,6 @@ fun main() {
 		}
 		
 		
-		val shape = remember {
-			// parseWavefrontObj(stringInput(modelText))
-			
-			buildModel3d {
-				polygon {
-					val l = 80f
-					point(-l, -l, l)
-					point(-l, -l, -l)
-					point(l, -l, -l)
-					point(l, -l, l)
-					point(l, l, l)
-					point(l, l, -l)
-					point(-l, l, -l)
-					point(-l, l, l)
-					point(-l, -l, l)
-				}
-			}
-		}
-		
 		Canvas(width = 1000.0, height = 800.0) {
 			fillStyle = "#f5f5f5"
 			fillRect(0.0, 0.0, canvas.width.toDouble(), canvas.height.toDouble())
@@ -93,7 +80,7 @@ fun main() {
 			save()
 			translate(canvas.width / 2.0, canvas.height / 2.0)
 			
-			renderModelJs(viewport.backend, shape)
+			renderModelJs(viewport.backend, obj)
 			
 			restore()
 		}
@@ -106,4 +93,6 @@ fun main() {
 			Text(message ?: "")
 		}
 	}
+	
+	return { composition.dispose() }
 }
