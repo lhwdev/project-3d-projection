@@ -1,6 +1,8 @@
 package com.lhwdev.math.projection3d
 
 import androidx.compose.runtime.*
+import com.lhwdev.math.vector.Vector3d
+import kotlinx.browser.document
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -15,10 +17,23 @@ import org.jetbrains.compose.web.dom.TagElement
 import org.w3c.dom.CanvasRenderingContext2D
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLCanvasElement
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.MouseEvent
 
 
 object CanvasTag : Tag
 
+
+@Composable
+inline fun <reified E : Event> EventListener(type: String, crossinline callback: (E) -> Unit) {
+	DisposableEffect(type) {
+		val instance = { event: Event ->
+			callback(event as E)
+		}
+		document.addEventListener(type, instance)
+		onDispose { document.removeEventListener(type, instance) }
+	}
+}
 
 @Composable
 fun Canvas(width: Double? = null, height: Double? = null, onDraw: CanvasRenderingContext2D.() -> Unit) {

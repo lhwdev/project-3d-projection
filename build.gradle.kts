@@ -40,6 +40,13 @@ kotlin {
     }
     
     sourceSets {
+        named("commonMain") {
+            dependencies {
+                implementation(compose.runtime)
+                // implementation("org.jetbrains.kotlinx:kotlinx-coroutines-io:0.1.16")
+            }
+        }
+        
         named("jvmMain") {
             dependencies {
                 implementation(compose.ui)

@@ -15,6 +15,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerMoveFilter
 import androidx.compose.ui.unit.dp
+import com.lhwdev.math.model.buildModel3d
 import com.lhwdev.math.vector.MutableVector3d
 import com.lhwdev.math.vector.Vector3d
 import com.lhwdev.math.vector.eulerToQuaternionRotation
@@ -42,7 +43,7 @@ fun Modifier.projectionMain(rotation: Vector3d): Modifier = composed {
 	val viewport = remember(rotation) { Viewport(eulerToQuaternionRotation(rotation / 20f)) }
 	
 	val square = remember {
-		buildPolygon3d {
+		buildModel3d {
 			val l = 80f
 			point(-l, -l, l)
 			point(-l, -l, -l)

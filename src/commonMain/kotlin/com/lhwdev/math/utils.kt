@@ -1,4 +1,6 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.lhwdev.math
 
 
-fun Float.pow2(): Float = this * this
+inline fun Float.pow2(): Float = this * this
